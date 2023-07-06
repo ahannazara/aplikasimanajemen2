@@ -1,17 +1,19 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter_application_3/homepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/homepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class login extends StatefulWidget {
-  const login({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  State<login> createState() => _loginState();
+  State<Login> createState() => _LoginState();
 }
 
-class _loginState extends State<login> {
+class _LoginState extends State<Login> {
   TextEditingController txtusername = TextEditingController();
 
   TextEditingController txtpassword = TextEditingController();
@@ -76,16 +78,41 @@ class _loginState extends State<login> {
           ),
           ElevatedButton(
               onPressed: () async {
+                final ctx = context;
                 var password = txtpassword.text.toString();
                 var username = txtusername.text.toString();
 
+                // get data from server
                 var url = "https://keluhan1flutter.000webhostapp.com/login.php";
-                http.post(Uri.parse(url), body: {
+
+                await http.post(Uri.parse(url), body: {
                   "username": username,
                   "password": password
-                }).then((response) {
-                  print("Response status: ${response.statusCode}");
-                  print("Response body: ${response.body}");
+                }).then((response) async {
+                  // convert data json
+                  Map<String, dynamic> data = jsonDecode(response.body);
+                  if (response.statusCode == 200) {
+                    log("Response status: ${response.statusCode}");
+                    log("Response body: ${response.body}");
+
+                    var token = data['token'] as String?;
+
+                    if (token != null) {
+                      // save token in phone
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setString('jwt_token', token);
+
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                        ctx,
+                        MaterialPageRoute(builder: (ctx) => const homepage()),
+                      );
+                    }
+                  } else {
+                    var message = data['message'] as String?;
+                    log(message ?? '');
+                  }
                 });
               },
               child: const Text("LOGIN"))

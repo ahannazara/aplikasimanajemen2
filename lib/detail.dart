@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class detail extends StatefulWidget {
-  detail({super.key, required this.index, required this.list});
+class Detail extends StatefulWidget {
+  Detail({super.key, required this.index, required this.list});
   List list;
   int index;
   @override
-  State<detail> createState() => _detailState();
+  State<Detail> createState() => _DetailState();
 }
 
-class _detailState extends State<detail> {
+class _DetailState extends State<Detail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

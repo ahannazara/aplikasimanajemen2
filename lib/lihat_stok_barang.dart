@@ -90,7 +90,7 @@ class ItemList extends StatelessWidget {
                   padding: const EdgeInsets.all(10.0),
                   child: GestureDetector(
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => detail(
+                        builder: (BuildContext context) => Detail(
                               list: list,
                               index: i,
                             ))),
