@@ -45,12 +45,10 @@ class Page1 extends StatelessWidget {
                     shape: const StadiumBorder(),
                   ),
                   //Lembarpengaduan
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const Lembarpengaduan();
-                    }));
-                  },
+                  onPressed: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) {
+                    return const Lembarpengaduan();
+                  })),
                   child: const Text("Lapor kerusakan",
                       textAlign: TextAlign.center),
                 ),
