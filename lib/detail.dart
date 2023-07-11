@@ -48,20 +48,21 @@ class _DetailState extends State<Detail> {
                       child: const Text("edit")),
                   const Padding(padding: EdgeInsets.all(90)),
                   ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        textStyle: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 20,
-                        ),
-                        side: const BorderSide(color: Colors.white, width: 2),
+                    style: ElevatedButton.styleFrom(
+                      textStyle: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                      onPressed: () {},
-                      child: const Text("delete")),
+                      backgroundColor: Colors.red,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 20,
+                      ),
+                      side: const BorderSide(color: Colors.white, width: 2),
+                    ),
+                    onPressed: () {},
+                    child: const Text("delete"),
+                  ),
                 ],
               )
             ],

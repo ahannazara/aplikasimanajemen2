@@ -77,45 +77,46 @@ class _LoginState extends State<Login> {
             width: 10000,
           ),
           ElevatedButton(
-              onPressed: () async {
-                final ctx = context;
-                var password = txtpassword.text.toString();
-                var username = txtusername.text.toString();
+            onPressed: () async {
+              final ctx = context;
+              var password = txtpassword.text.toString();
+              var username = txtusername.text.toString();
 
-                // get data from server
-                var url = "https://keluhan1flutter.000webhostapp.com/login.php";
+              // get data from server
+              var url = "https://keluhan1flutter.000webhostapp.com/login.php";
 
-                await http.post(Uri.parse(url), body: {
-                  "username": username,
-                  "password": password
-                }).then((response) async {
-                  // convert data json
-                  Map<String, dynamic> data = jsonDecode(response.body);
-                  if (response.statusCode == 200) {
-                    log("Response status: ${response.statusCode}");
-                    log("Response body: ${response.body}");
+              final response = await http.post(Uri.parse(url), body: {
+                "username": username,
+                "password": password,
+              });
 
-                    var token = data['token'] as String?;
+              if (response.statusCode == 200) {
+                Map<String, dynamic> data = jsonDecode(response.body);
+                log("Response status: ${response.statusCode}");
+                log("Response body: ${response.body}");
 
-                    if (token != null) {
-                      // save token in phone
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setString('jwt_token', token);
+                var token = data['token'] as String?;
 
-                      // ignore: use_build_context_synchronously
-                      Navigator.push(
-                        ctx,
-                        MaterialPageRoute(builder: (ctx) => const homepage()),
-                      );
-                    }
-                  } else {
-                    var message = data['message'] as String?;
-                    log(message ?? '');
-                  }
-                });
-              },
-              child: const Text("LOGIN"))
+                if (token != null) {
+                  // save token in phone
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.setString('jwt_token', token);
+
+                  // ignore: use_build_context_synchronously
+                  Navigator.push(
+                    ctx,
+                    MaterialPageRoute(builder: (ctx) => const homepage()),
+                  );
+                }
+              } else {
+                Map<String, dynamic> data = jsonDecode(response.body);
+                var message = data['message'] as String?;
+                log(message ?? '');
+              }
+            },
+            child: const Text("LOGIN"),
+          )
         ],
       ),
     );
