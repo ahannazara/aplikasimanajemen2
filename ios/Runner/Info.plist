@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Aplikasi Manjemen use the camera to take picture, record videos</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Aplikasi Manjemen use microphone for voice note feature</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Aplikasi Manjemen use your photo library to attach photos feature</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
