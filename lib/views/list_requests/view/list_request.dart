@@ -110,7 +110,7 @@ class _ListRequestPageState extends State<ListRequestPage> {
 
   Widget _deleteButton() {
     final role = payloadModel?.role;
-    if (role != null && (role == Role.admin && role == Role.supervisor)) {
+    if (role != null && (role == Role.admin || role == Role.supervisor)) {
       IconButton(
         onPressed: () => _fetchDelete(),
         icon: const Icon(Icons.delete),
