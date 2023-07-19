@@ -16,7 +16,7 @@ class ListRequestPage extends StatefulWidget {
 
 class _ListRequestPageState extends State<ListRequestPage> {
   List<DataRequest?>? request = [];
-  late PayloadModel payloadModel;
+  PayloadModel? payloadModel;
 
   @override
   void initState() {
@@ -94,7 +94,7 @@ class _ListRequestPageState extends State<ListRequestPage> {
   }
 
   Widget _updatebutton({DataRequest? req}) {
-    final role = payloadModel.role;
+    final role = payloadModel?.role;
     if (role != null && (role == Role.admin || role == Role.supervisor)) {
       return IconButton(
         onPressed: () => Navigator.pushNamed(
@@ -109,7 +109,7 @@ class _ListRequestPageState extends State<ListRequestPage> {
   }
 
   Widget _deleteButton() {
-    final role = payloadModel.role;
+    final role = payloadModel?.role;
     if (role != null && (role == Role.admin && role == Role.supervisor)) {
       IconButton(
         onPressed: () => _fetchDelete(),
@@ -120,7 +120,7 @@ class _ListRequestPageState extends State<ListRequestPage> {
   }
 
   Widget? _floatingButton() {
-    final role = payloadModel.role;
+    final role = payloadModel?.role;
     if (role != null &&
         (role == Role.admin ||
             role == Role.houseKeeping ||
@@ -146,26 +146,26 @@ class _ListRequestPageState extends State<ListRequestPage> {
       String jsonPayload = utf8.decode(bytes);
       Map<String, dynamic> decodePayload = jsonDecode(jsonPayload);
       setState(() => payloadModel = PayloadModel.fromMap(decodePayload));
-    }
+      log(token);
+      // get data from server
+      var url = "https://keluhan1flutter.000webhostapp.com/requests.php";
+      final headers = {'Authorization': token};
+      final response = await http.get(Uri.parse(url), headers: headers);
 
-    // get data from server
-    var url = "https://keluhan1flutter.000webhostapp.com/requests.php";
-    final headers = token == null ? null : {'Authorization': token};
-    final response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        log("Response status: ${response.statusCode}");
+        log("Response body: ${response.body}");
+        Map<String, dynamic> decode = jsonDecode(response.body);
+        final data = RequestModel.fromMap(decode);
+        setState(() => request = data.data);
+      } else {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        var message = data['message'] as String?;
+        log('Error : $message');
 
-    if (response.statusCode == 200) {
-      log("Response status: ${response.statusCode}");
-      log("Response body: ${response.body}");
-      Map<String, dynamic> decode = jsonDecode(response.body);
-      final data = RequestModel.fromMap(decode);
-      setState(() => request = data.data);
-    } else {
-      Map<String, dynamic> data = jsonDecode(response.body);
-      var message = data['message'] as String?;
-      log('Error : $message');
-
-      if (response.statusCode == 401) {
-        navigator.pushReplacementNamed('/login');
+        if (response.statusCode == 401) {
+          navigator.pushReplacementNamed('/login');
+        }
       }
     }
   }

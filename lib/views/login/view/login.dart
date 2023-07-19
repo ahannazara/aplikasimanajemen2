@@ -110,6 +110,8 @@ class _LoginPageState extends State<LoginPage> {
 
       var token = data['token'] as String?;
 
+      log(token.toString());
+
       if (token != null) {
         List<int> bytes = base64.decode(token);
         String jsonPayload = utf8.decode(bytes);
