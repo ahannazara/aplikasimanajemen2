@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/models/payload_model.dart';
 import 'package:flutter_application_3/models/request_model.dart';
@@ -77,7 +76,7 @@ class _ListRequestPageState extends State<ListRequestPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      _deleteButton(),
+                      _deleteButton(req?.id),
                       _updatebutton(req: req),
                     ],
                   ),
@@ -108,15 +107,22 @@ class _ListRequestPageState extends State<ListRequestPage> {
     return const SizedBox();
   }
 
-  Widget _deleteButton() {
+  Widget _deleteButton(String? id) {
     final role = payloadModel?.role;
     if (role != null && (role == Role.admin || role == Role.supervisor)) {
-      IconButton(
-        onPressed: () => _fetchDelete(),
-        icon: const Icon(Icons.delete),
+      return IconButton(
+        onPressed: () => _fetchDelete(id: id),
+        icon: const Icon(
+          Icons.delete,
+          color: Colors.black,
+        ),
       );
     }
-    return const SizedBox();
+    return Container(
+      color: Colors.amber,
+      width: 20,
+      height: 20,
+    );
   }
 
   Widget? _floatingButton() {
@@ -179,25 +185,27 @@ class _ListRequestPageState extends State<ListRequestPage> {
 
     // get data from server
     var url = "https://keluhan1flutter.000webhostapp.com/request_delete.php";
-    final headers = token == null ? null : {'Authorization': token};
-    final response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: {'id': id},
-    );
+    if (token != null && id != null) {
+      final headers = {'Authorization': token};
+      final response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: {'id': id},
+      );
 
-    log("Request fields: ${{'id': id}}");
-    log("Response status: ${response.statusCode}");
-    log("Response body: ${response.body}");
+      log("Request fields: ${{'id': id}}");
+      log("Response status: ${response.statusCode}");
+      log("Response body: ${response.body}");
 
-    if (response.statusCode == 200) {
-      await _fetchRequest();
-    } else {
-      Map<String, dynamic> data = jsonDecode(response.body);
-      var message = data['message'] as String?;
-      log(message ?? '');
-      if (response.statusCode == 401) {
-        navigator.pushReplacementNamed('/login');
+      if (response.statusCode == 200) {
+        await _fetchRequest();
+      } else {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        var message = data['message'] as String?;
+        log(message ?? '');
+        if (response.statusCode == 401) {
+          navigator.pushReplacementNamed('/login');
+        }
       }
     }
   }
