@@ -16,7 +16,7 @@ class ItemsPage extends StatefulWidget {
 
 class _ItemsPageState extends State<ItemsPage> {
   List<DataItems?>? items = [];
-  late PayloadModel payloadModel;
+  PayloadModel? payloadModel;
 
   @override
   void initState() {
@@ -87,7 +87,7 @@ class _ItemsPageState extends State<ItemsPage> {
   }
 
   Widget? _floatingButton() {
-    final role = payloadModel.role;
+    final role = payloadModel?.role;
     if (role != null && (role == Role.supervisor || role == Role.admin)) {
       return FloatingActionButton(
         child: const Icon(Icons.add),
@@ -100,7 +100,7 @@ class _ItemsPageState extends State<ItemsPage> {
   }
 
   Widget _updateButton({DataItems? item}) {
-    final role = payloadModel.role;
+    final role = payloadModel?.role;
     if (role != null && (role == Role.admin || role == Role.supervisor)) {
       return IconButton(
         onPressed: () => Navigator.pushNamed(
@@ -115,7 +115,7 @@ class _ItemsPageState extends State<ItemsPage> {
   }
 
   Widget _deleteButton({String? id}) {
-    final role = payloadModel.role;
+    final role = payloadModel?.role;
     if (role != null && (role == Role.admin || role == Role.supervisor)) {
       return IconButton(
         onPressed: () async => _fetchDelete(id: id),
