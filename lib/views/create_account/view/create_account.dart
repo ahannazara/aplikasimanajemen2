@@ -60,7 +60,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             DropdownWidget(
               dropdownValue: dropdownValue ?? listValue[0],
               listValue: listValue,
-              onChanged: (value) {},
+              onChanged: (value) => setState(() => dropdownValue = value),
             ),
             const SizedBox(height: 32),
             ElevatedButton(
